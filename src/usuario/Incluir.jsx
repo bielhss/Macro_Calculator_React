@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Cabecalho from "../components/Cabecalho";
+import Nav from "../components/Nav";
 import { createUsuario } from "../service/UsuarioService";
 import { validarUsuario } from "../validacao/ValidUsuario";
 class IncluirUsuario extends React.Component {
@@ -83,7 +85,9 @@ class IncluirUsuario extends React.Component {
       formValidation,
     } = this.state;
     return (
-      <div className="container pt-5">
+      <div className="container">
+        <Nav/>
+        <Cabecalho path="/autor/listar" tituloPagina="Cadastro de Autores" tituloPesquisa="Lista de Autores"/>
         <div className="tile">
           <div className="tile-body">
             <form onSubmit={(e) => this.handleSubimitUsuario(e)}> 
@@ -126,7 +130,7 @@ class IncluirUsuario extends React.Component {
                       Data Nascimento:
                     </label>
                     <input
-                      type="text"
+                      type="date"
                       name="data_nascimento"
                       value={data_nascimento}
                       onChange={(e) => this.onChange(e)}

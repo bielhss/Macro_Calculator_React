@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
+import Cabecalho from "../components/Cabecalho";
+import Nav from "../components/Nav";
 import Paginacao from "../components/Paginacao";
 
 import { findAllUsuarios } from "../service/UsuarioService";
@@ -55,6 +57,7 @@ class ListarUsuario extends Component {
 
     return (
       <div>
+        <Nav/>
         <div className="container">
           <div className="app-title">
             <h1>
@@ -69,6 +72,7 @@ class ListarUsuario extends Component {
               </li>
             </ul>
           </div>
+          <Cabecalho path="/" tituloPagina="Listagem de Autores" tituloPesquisa="Menu Principal"/>
         </div>
         <div className="container">
           <div className="tile">

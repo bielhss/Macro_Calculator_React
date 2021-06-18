@@ -1,8 +1,11 @@
 export const validarUsuario = (state) => {
 
     let {
-        nome,
-        email,
+      nome,
+      data_nascimento,
+      sexo,
+      email,
+      telefone_celular,
         toReturn,
         formValidation,
       } = state;
