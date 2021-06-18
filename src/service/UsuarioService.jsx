@@ -1,14 +1,22 @@
 import http from '../util/banco';
-export const findAllUsuarios = async () => {
-    return (
-        http.get('/usuario/listar')
-            .then( res => {
-            return res.data;
-            })
-    )
-}  
 
-export const findUsuarioById = async ( id ) => {
+export const findAllUsuarios = async (paginaAtual,pageSize,dir,props,search) => {
+    return (
+        http.get('/usuario/listar',{
+           params:{
+               paginaAtual,
+               pageSize,
+               dir,
+               props,
+               search
+           }, 
+        }).then( res => {
+           return res.data;
+        })
+    )
+} 
+
+export const findusuarioById = async ( id ) => {
     return (
         http.get(`/usuario/alterar/${id}`)
             .then( res => { 
@@ -18,8 +26,7 @@ export const findUsuarioById = async ( id ) => {
             })
     )
 }
-
-export const createUsuario = async ( usuario ) => {
+export const createusuario = async ( usuario ) => {
     return (
         http({
             method:'post',
@@ -31,11 +38,9 @@ export const createUsuario = async ( usuario ) => {
         }).then(res => {
             return res.data
         })
-
     )
 }
-
-export const updateUsuario = async ( usuario ) => {
+export const updateusuario = async ( usuario ) => {
     return (
         http({
             method:'post',
@@ -50,7 +55,5 @@ export const updateUsuario = async ( usuario ) => {
         }).catch(error => {
             return error.response
         })
-
     )
 }
-

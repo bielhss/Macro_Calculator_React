@@ -1,32 +1,60 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { findAllusuarios } from "../service/UsuarioService";
+import Paginacao from "../components/Paginacao";
 
-class Listarusuario extends Component {
+import { findAllUsuarios } from "../service/UsuarioService";
+
+class ListarUsuario extends Component {
   constructor() {
     super();
     this.state = this.initState();
+    this.setNumberPaginaAtual = this.setNumberPaginaAtual.bind(this);
   }
 
   initState = () => ({
-    usuarioes: [],
-    paginaInicio: 0,
-    paginaFim: 0,
+    Usuarios: [],
+    paginaAtual:1,
+    pageSize:5,
+    dir:'asc',
+    props:'id',
+    total:0,
+    paginaFim:0,
+    search:'',
   });
 
-  async componentDidMount() {
-    const usuarioes = await findAllUsuarios();
+  componentDidMount() {
+    this.loadData();
+  }
+
+  async loadData(){
+    const { paginaAtual, pageSize, dir, asc, search} = this.state;
+    const Usuarios = await findAllUsuarios(paginaAtual,pageSize,dir,asc,search);
     this.setState({
-      usuarioes: usuarioes.data,
-      paginaInicio: usuarioes.current_page,
-      paginaFim: usuarioes.total,
+      Usuarios: Usuarios.data,
+      paginaAtual:Usuarios.paginaAtual,
+      pageSize:Usuarios.pageSize,
+      paginaFim:Usuarios.paginaFim,
+      total:Usuarios.total,
     });
   }
 
+
+  setNumberPaginaAtual = (pagina) => {
+    this.setState({
+      paginaAtual:pagina
+    }, () => this.updateState())
+  }
+
+  updateState = () => {
+    this.loadData();
+  } 
+
+
   render() {
-    const { usuarios, pageSize, paginaAtual, paginaFim, totalCount } = this.state;
+    const { Usuarios, paginaAtual, pageSize, paginaFim, total } = this.state;
+
     return (
-        <div>
+      <div>
         <div className="container">
           <div className="app-title">
             <h1>
@@ -48,19 +76,19 @@ class Listarusuario extends Component {
               <div id="no-more-tables">
                 <table className="table table-striped table-bordered table-hover cf ">
                   <thead className="cf">
-                        <tr>
-                          <td>Id</td>
-                          <td>Nome</td>
-                          <td>E-mail</td>
-                          </tr>
+                    <tr>
+                      <th>Id</th>
+                      <th>Nome</th>
+                      <th>Ações</th>
+                    </tr>
                   </thead>
                   <tbody>
-                    {usuarios.map( (usuario) => (
-                    <tr key={usuario.id}>
-                      <td>{ usuario.id }</td>
-                      <td>{ usuario.nome }</td>
+                    {Usuarios.map( (Usuario) => (
+                    <tr key={Usuario.id}>
+                      <td>{ Usuario.id }</td>
+                      <td>{ Usuario.nome }</td>
                       <td>
-                        <Link className="btn btn-info btn-sm" to={`/usuario/alterar/${usuario.id}`}>
+                        <Link className="btn btn-info btn-sm" to={`/Usuario/alterar/${Usuario.id}`}>
                           <i className="fa fa-pencil"></i>
                         </Link>
                         <a className="btn btn-danger btn-sm" href="#">
@@ -72,9 +100,15 @@ class Listarusuario extends Component {
                       </td>
                     </tr>
                     ))}
+
                   </tbody>
                 </table>
-                <Link className="btn btn-success btn-lg" to="/usuario/inserir" title="Incluir novo Registro">
+                <Paginacao paginaAtual={paginaAtual}
+                           pageSize={pageSize}
+                           paginaFim={paginaFim}
+                           total={total}
+                           setRenderPaginaCorrente={(pagina) => this.setNumberPaginaAtual(pagina)}/>
+                <Link className="btn btn-success btn-lg" to="/Usuario/inserir" title="Incluir novo Registro">
                   <i className="fa fa-plus-circle"></i>
                 </Link>
               </div>
@@ -85,4 +119,4 @@ class Listarusuario extends Component {
     );
   }
 }
-export default Listarusuario;
+export default ListarUsuario;
